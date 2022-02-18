@@ -1,10 +1,12 @@
 import mongo from "mongoose";
 
-const schema = new mongo.schema({
+const typePetSchema = new mongo.Schema({
     race:String,
     description:String,
+    registerDate: {type: Date, default: Date.now},
+    dbStatus: Boolean,
 });
 
-const typePet = mongo.model("type_pet", schema);
+const typePet = mongo.model("typePet", typePetSchema);
 
 export default typePet;
