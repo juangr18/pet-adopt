@@ -1,4 +1,6 @@
 import Response from 'express'
+import bcrypt from "bcrypt"
+
 import owner from "../models/owner.js"
 
 
@@ -9,10 +11,17 @@ const registerOwner = async (req, res = Response) => {
       message: "Incomplete data"
     })
 
+  const existingUser = await owner.findOne({email});
+  if (existingUser)
+    return res.status(400).send({message: "The user is already registered"})
+
+  const passHash = await bcrypt.hash(password, 10)
+
+
   const schema = new owner({
     name,
     email,
-    password
+    password: passHash
   })
 
   const result = await schema.save()
